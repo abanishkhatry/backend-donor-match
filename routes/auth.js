@@ -9,6 +9,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 // Imports the User model, which is used to interact with the users collection in the MongoDB database.
 const User = require('../models/User');
+// Imports the authentication middleware, which checks if a user is authenticated before allowing access to certain routes.
+const auth = require('../middleware/auth');
 
 // Signup route
 // Defines a POST route at /api/auth/signup. It will run when the frontend sends a signup request.
@@ -64,6 +66,18 @@ router.post('/login', async (req, res) => {
     res.status(500).send('Server error');
   }
 });
+
+// Protect a route
+router.get('/me', auth, async (req, res) => {
+    try {
+        const user = await User.findById(req.user).select('-password'); // remove password field
+        if (!user) return res.status(404).json({ msg: 'User not found' });
+        res.json(user);
+      } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server error');
+      }
+  });
 
 // Exports the router object so it can be used in other files, like server.js.
 module.exports = router;
