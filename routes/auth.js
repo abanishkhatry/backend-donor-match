@@ -41,6 +41,7 @@ router.post('/signup', async (req, res) => {
   }
 });
 
+
 // Login route
 // Defines a POST route at /api/auth/login. It will run when the frontend sends a login request.
 router.post('/login', async (req, res) => {

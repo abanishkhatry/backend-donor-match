@@ -21,15 +21,22 @@ connectDB();
 const app = express();
 // This uses the CORS middleware to allow cross-origin requests.
 app.use(cors());
+
+
 // This middleware parses incoming JSON requests and makes the data available in req.body.
 app.use(express.json());
+
+app.get('/ping', (req, res) => {
+    res.send('pong');
+  });
+
 
 // This imports the authentication routes from routes/auth.js.
 // These routes handle user signup and login requests.
 app.use('/api/auth', require('./routes/auth'));
 
 // This imports the donor routes from routes/donors.js.
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5050;
 
 // Start the server
 // This starts the Express server and listens for incoming requests on the specified port.
