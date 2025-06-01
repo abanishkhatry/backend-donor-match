@@ -47,22 +47,25 @@ router.post('/signup', async (req, res) => {
 router.post('/login', async (req, res) => {
     // Extracts the email and password from the request body. This is the user input.
   const { email, password } = req.body;
+
   try {
     // Checks if the user exists in the database by searching for the email.
     const user = await User.findOne({ email });
     // If the user is not found, return a 400 Bad Request error with a message.
-    if (!user) return res.status(400).json({ msg: 'Invalid credentials' });
+    if (!user) return res.status(400).json({ msg: 'User does not exist' });
 
     // Compares the provided password with the hashed password stored in the database.
     // This is done using bcrypt's compare function, which checks if the password matches the hash.
     const isMatch = await bcrypt.compare(password, user.password);
     // If the password doesn't match, return a 400 Bad Request error with a message.
     if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials' });
+
     // If the password matches, generate a JWT token for the user.
     // This token will be used for authentication in future requests.
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    // Sends a JSON response to the client with the token and user information (excluding the password).
-    res.json({ token, user: { id: user.id, name: user.name, email: user.email } });
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+
+    // Sends a JSON response to the client with the token 
+    res.json({ token });
   } catch (err) {
     res.status(500).send('Server error');
   }

@@ -11,6 +11,10 @@ const dotenv = require('dotenv');
 // This function establishes a connection to the MongoDB database using Mongoose.
 const connectDB = require('./config/db');
 
+const sloganGenerator = require('./routes/slogan')
+
+const donorProfileRoute = require('./routes/donorsProfileInfo');
+
 // Load environment variables from .env file
 dotenv.config();
 // Connect to the database
@@ -26,16 +30,15 @@ app.use(cors());
 // This middleware parses incoming JSON requests and makes the data available in req.body.
 app.use(express.json());
 
-app.get('/ping', (req, res) => {
-    res.send('pong');
-  });
-
 
 // This imports the authentication routes from routes/auth.js.
 // These routes handle user signup and login requests.
 app.use('/api/auth', require('./routes/auth'));
 
-// This imports the donor routes from routes/donors.js.
+app.use('/api/slogan', sloganGenerator); 
+
+app.use('/api/donorsProfile', donorProfileRoute)
+
 const PORT = process.env.PORT || 5050;
 
 // Start the server

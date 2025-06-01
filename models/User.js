@@ -10,4 +10,4 @@ const UserSchema = new mongoose.Schema({
 });
 //Exports a Mongoose model called 'User' based on the UserSchema
 // This model can be used to create, read, update, and delete user documents in the MongoDB database.
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('User', UserSchema); 
